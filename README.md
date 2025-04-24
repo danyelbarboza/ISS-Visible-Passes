@@ -1,64 +1,91 @@
-# **ISS-Tracker-Weather** *(Development Preview)*  
-*A minimal Python tool to fetch visible ISS passes with basic timezone conversion*
+# ISS-Visible-Passes
 
-🔧 **Current State**: Core ISS pass-fetching functional | Weather integration pending  
-
----
-
-## **Features Implemented**  
-✅ Fetches ISS pass data from N2YO API  
-✅ Converts UTC timestamps to local timezone  
-✅ Configurable via `.env` file (latitude/longitude/API key)  
-❌ Weather filtering (next phase)  
+This Python tool checks visible ISS (International Space Station) passes for any location, combining orbital data from N2YO with weather forecasts from Open-Meteo. Users enter a city name, and the system returns upcoming passes filtered by cloud cover and visibility, with UTC-to-local time conversion. Built with Python, Requests, and Pandas, it's designed for easy expansion to web interfaces or additional satellites.
 
 ---
 
-## **Tech Stack**  
-- **Backend**: Python 3  
-- **APIs**: [N2YO](https://www.n2yo.com/api/) (ISS orbital data)  
-- **Libraries**: `requests`, `python-dotenv`  
-- **Config**: Environment variables (`.env`)  
+## Features Implemented
+
+- ✅ Converts city names to coordinates (**Nominatim API**)
+- ✅ Fetches ISS pass times (**N2YO API**)
+- ✅ Checks weather conditions for each pass (**Open-Meteo API**)
+- ✅ Filters passes by cloud cover and visibility
+- ✅ Dynamic timezone conversion
+- ✅ Caching for API responses
 
 ---
 
-## **Quick Start**  
-1. **Setup**  
-   ```bash
-   git clone https://github.com/yourusername/ISS-Tracker-Weather.git
-   cd ISS-Tracker-Weather
-   pip install requests python-dotenv
-   ```
+## Tech Stack
 
-2. **Configure**  
-   Create `.env` file:
-   ```ini
-   # .env.example
-   latitude=YOUR_LAT
-   longitude=YOUR_LON
-   observer_alt=0
-   API_KEY=your_n2yo_key
-   gmt=-3  # Your GMT offset
-   ```
+**Backend:** Python 3
 
-3. **Run**  
-   ```bash
-   python ISS_whenever.py
-   ```
+### APIs Utilized
+- [N2YO](https://www.n2yo.com/api/) (ISS orbital data)
+- [Nominatim](https://nominatim.org/release-docs/develop/api/Search/) (Geocoding)
+- [Open-Meteo](https://open-meteo.com/en/docs) (Weather)
+
+### Key Libraries
+- `requests` + `requests_cache`
+- `pandas` (for weather data processing)
+- `python-dotenv`
+
+**Configuration:** Environment variables (`.env`)
 
 ---
 
-## **Sample Output**  
-```plaintext
-Start: 25/04/2025 19:45, Duration: 360s
-Start: 26/04/2025 05:22, Duration: 420s
+## ⚡ Quick Start
+
+### 1. Setup
+
+```bash
+git clone https://github.com/yourusername/ISS-Tracker-Weather.git
+cd ISS-Tracker-Weather
+pip install requests requests_cache pandas python-dotenv openmeteo-api retry-requests
 ```
 
-## **Next Steps**  
-➡️ Integrate OpenWeatherMap API  
-➡️ Add city-to-coordinates conversion  
-➡️ Build web interface (FastAPI/Flask)  
+### 2. Configuration
+
+Create a `.env` file in the root directory:
+
+```ini
+API_KEY=your_n2yo_api_key
+observer_alt=0
+days=10
+min_visibility=1
+gmt=-3
+```
+
+### 3. Run
+
+```bash
+python main.py
+```
 
 ---
 
-## License
-MIT License - Available for use and modification. See the LICENSE file for details.
+## 📊 Sample Output
+
+```plaintext
+Passagem 1:
+  Horário: 2023-10-25T19:30 (Duração: 6 minutos)
+  Clima:
+    Temperatura: 22.5°C
+    Nuvens: 20%
+    Visibilidade: 12.4 km
+    Período: Day
+----------------------------------
+Passagem 2:
+  Horário: 2023-10-25T21:15 (Duração: 4 minutos)
+  Clima:
+    Temperatura: 18.2°C
+    Nuvens: 90%
+    Visibilidade: 1.2 km
+    Período: Night
+```
+
+---
+
+## 📝 License
+
+**MIT License** - Available for use and modification. See the LICENSE file for details.
+```
