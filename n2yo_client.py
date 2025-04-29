@@ -6,11 +6,11 @@ class N2yoClient:
         self.norad_id = config.norad_id
         self.latitude = config.latitude
         self.longitude = config.longitude
-        self.observer_alt = config.observer_alt
+        self.observer_alt = 0
         self.days = config.days
         self.min_visibility = config.min_visibility
         self.api_key = config.api_key
-        self.gmt = config.gmt
+        self.gmt = -3
     
     def fetch_data(self):
         response = requests.get(f"https://api.n2yo.com/rest/v1/satellite/visualpasses/{self.norad_id}/{self.latitude}/{self.longitude}/{self.observer_alt}/{self.days}/{self.min_visibility}/&apiKey={self.api_key}")
